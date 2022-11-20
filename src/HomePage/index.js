@@ -1,3 +1,5 @@
+import { ShoppingList } from '../ShoppingList';
+
 export const HomePage = (props) => {
   const { session } = props;
 
@@ -8,9 +10,13 @@ export const HomePage = (props) => {
   const element = document.createElement('div');
   element.classList.add('page');
   element.innerHTML = `
-  <div class="container">
-    <h1>Supabase app</h1>
-  </div>`;
+    <div class="container">
+      <h1>Nákupní seznam</h1>
+      <div class="lists"></div>
+    </div>
+  `;
+
+  element.querySelector('.lists').append(ShoppingList({ session: session }));
 
   return element;
 };
