@@ -1,12 +1,19 @@
+import { signOut } from '../functions/auth';
 import './style.css';
 
-export const Header = () => {
+export const Header = (props) => {
+  const { session } = props;
+
   let userContent = `
     <nav>
       <a href="/register">Registrovat</a>
       <a href="/login">Přihlásit</a>
     </nav>
   `;
+
+  if (session) {
+    userContent = `<div>${session.user.email}<button class="btn-logout">Odhlásit</button></div>`;
+  }
 
   const element = document.createElement('header');
   element.innerHTML = `
@@ -19,6 +26,17 @@ export const Header = () => {
       </div>
     </div>
   `;
+
+  const logoutButton = element.querySelector('.btn-logout');
+  if (logoutButton) {
+    logoutButton.addEventListener('click', () => {
+      signOut().then((response) => {
+        if (!response.error) {
+          window.location.href = '/login';
+        }
+      });
+    });
+  }
 
   return element;
 };

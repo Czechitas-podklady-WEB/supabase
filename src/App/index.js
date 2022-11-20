@@ -2,19 +2,32 @@ import { Header } from '../Header/index.js';
 import { HomePage } from '../HomePage/index.js';
 import { LoginPage } from '../LoginPage/index.js';
 import { RegisterPage } from '../RegisterPage/index.js';
+import { getSession } from '../functions/auth.js';
+export const App = (props) => {
+  const { session } = props;
 
-export const App = () => {
   const element = document.createElement('div');
-  element.classList.add('app');
-  element.append(Header());
 
-  const { pathname } = window.location;
-  if (pathname === '/') {
-    element.append(HomePage({}));
-  } else if (pathname === '/login') {
-    element.append(LoginPage({}));
-  } else if (pathname === '/register') {
-    element.append(RegisterPage({}));
+  if (session === undefined) {
+    getSession().then((response) => {
+      element.replaceWith(
+        App({
+          session: response.data.session ? response.data.session : null,
+        }),
+      );
+    });
+  } else {
+    element.classList.add('app');
+    element.append(Header({ session: session }));
+
+    const { pathname } = window.location;
+    if (pathname === '/') {
+      element.append(HomePage({ session: session }));
+    } else if (pathname === '/login') {
+      element.append(LoginPage({ session: session }));
+    } else if (pathname === '/register') {
+      element.append(RegisterPage({ session: session }));
+    }
   }
 
   return element;

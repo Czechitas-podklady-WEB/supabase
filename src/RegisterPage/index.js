@@ -1,5 +1,11 @@
+import { signUp } from '../functions/auth';
+
 export const RegisterPage = (props) => {
-  const { error } = props;
+  const { error, session } = props;
+
+  if (session) {
+    window.location.href = '/';
+  }
 
   let alert = '';
 
@@ -24,6 +30,20 @@ export const RegisterPage = (props) => {
       </form>
     </div>
   `;
+
+  element.querySelector('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = element.querySelector('.email-input').value;
+    const password = element.querySelector('.password-input').value;
+
+    signUp(email, password).then((response) => {
+      if (response.error) {
+        element.replaceWith(RegisterPage({ error: response.error.message }));
+      } else {
+        window.location.href = '/';
+      }
+    });
+  });
 
   return element;
 };
