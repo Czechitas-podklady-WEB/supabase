@@ -10,7 +10,7 @@ export const App = () => {
 
   const { pathname } = window.location;
   if (pathname === '/') {
-    element.append(HomePage({}));
+    element.append(HomePage());
   } else if (pathname === '/login') {
     element.append(LoginPage({}));
   } else if (pathname === '/register') {
